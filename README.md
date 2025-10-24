@@ -1,4 +1,4 @@
-***************************************
+Aff***************************************
 ## PROJET PERSONNEL DE GESTION D'UN CLUB EN C
 **************************************
 ### 🧩 DESCRIPTION DU PROJET 
@@ -694,6 +694,55 @@ if (!trouve)
 }
 ```
 *************************************
-#### h.📜 
+#### h.📜 Afficher les utilisateurs par statut de cotisation
+
+Cette fonctionnalité permet à un administrateur simple d’afficher uniquement les utilisateurs en fonction de leur statut de cotisation.
+L’administrateur peut choisir d’afficher ceux qui ont entièrement cotisé, partiellement cotisé ou pas encore cotisé.
+Le programme lit le fichier utilisateurs.txt, filtre les lignes selon le statut choisi et affiche uniquement les correspondants.
+Cela facilite le suivi des paiements et la gestion financière du club.
+
+💻 Code complet
+
+```
+#include <stdio.h> #include <stdlib.h> #include <string.h>
+
+struct Utilisateur { char nom[50]; char prenom[50]; char matricule[8]; char statut[15]; };
+
+void afficher_utilisateurs_par_statut() { FILE *f; struct Utilisateur u; char statut_recherche[15]; int trouve = 0;
+
+f = fopen("utilisateurs.txt", "r");
+if (f == NULL) {
+    printf("\n[ERREUR] Impossible d'ouvrir le fichier 'utilisateurs.txt'.\n");
+    return;
+}
+
+printf("\n=== AFFICHAGE SELON LE STATUT DE COTISATION ===\n");
+printf("Entrez le statut à afficher (entière/partielle/aucune) : ");
+scanf("%s", statut_recherche);
+
+printf("\n=========== LISTE DES UTILISATEURS (%s) ===========\n", statut_recherche);
+printf("%-15s %-15s %-10s %-15s\n", "Nom", "Prénom", "Matricule", "Statut");
+printf("------------------------------------------------------------\n");
+
+while (fscanf(f, "%s %s %s %s", u.nom, u.prenom, u.matricule, u.statut) != EOF) {
+    if (strcmp(u.statut, statut_recherche) == 0) {
+        printf("%-15s %-15s %-10s %-15s\n", u.nom, u.prenom, u.matricule, u.statut);
+        trouve = 1;
+    }
+}
+
+fclose(f);
+
+if (!trouve)
+    printf("\n[AUCUN RÉSULTAT] Aucun utilisateur trouvé avec ce statut.\n");
+
+}
+```
+
+*************************************
+#### 3. UTILISATEUR 
+Ce dernier possede les droits les plus restreint de l'application
+*************************************
+#### a. 🍳 Consulter son statut de cotisation
 
 
