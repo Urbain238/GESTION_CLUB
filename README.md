@@ -30,7 +30,6 @@ Si les deux informations correspondent, la connexion est validée et le menu de 
 
 💻 Code en C
 
-```
 #include <stdio.h>
 #include <string.h>
 
@@ -64,7 +63,6 @@ int ag_connexion() {
     printf("\n[ÉCHEC] Nom d'utilisateur ou matricule incorrect.\n");
     return 0; // Connexion échouée
 }
-```
 🗂️ Exemple de contenu du fichier super_admin.txt
 
 admin_general ADM0002
