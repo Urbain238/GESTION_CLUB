@@ -888,6 +888,13 @@ et l’interaction utilisateur via une interface console intuitive.
 
 Il offre ainsi une vision concrète de la manière dont un logiciel de gestion peut être conçu à partir de zéro en langage C, tout en respectant la logique d’organisation, de sécurité et de maintenance des données.
 Ce projet constitue une excellente base pour de futures améliorations, comme l’ajout d’un système d’authentification renforcé, d’un menu interactif enrichi ou encore d’une interface graphique.
+*************************************
+### INSTRUCTIONS DE COMPILATION 
 
+Sur Ubuntu mettre tout les fichiers dans un dossier, ensuite ouvrir le dossier dans un terminal ensuite saisir la commande suivante dans oe terminal 
+```
+bash ./club
+```
+le logiciel s'exécutera le fichier exécutable est nommée club.
 
 
