@@ -91,4 +91,55 @@ int main() {
 
 admin_general ADM0002
 
-#### b. AJOUTER UN ADMIN 
+#### b. 👤 Ajout d’un administrateur
+
+Cette fonctionnalité permet à l’administrateur général d’ajouter un nouvel administrateur dans le système.
+Chaque administrateur est identifié par son nom, prénom, nom d’utilisateur et un matricule généré automatiquement composé de sept caractères commençant par “ADM”.
+Les informations sont enregistrées dans un fichier texte appelé admins.txt afin de garantir la sauvegarde et la persistance des données.
+
+Lorsqu’un administrateur est ajouté, son matricule est généré aléatoirement, puis l’ensemble des informations est sauvegardé dans le fichier sous la forme :
+
+nom prénom username matricule
+
+💻 Code complet de la fonctionnalité
+
+```
+#include <stdio.h> #include <string.h> #include <stdlib.h> #include <time.h>
+
+void genererMatriculeAdmin(char matricule[]) { int i; char lettres[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; strcpy(matricule, "ADM"); for (i = 3; i < 7; i++) { matricule[i] = lettres[rand() % strlen(lettres)]; } matricule[7] = '\0'; }
+
+void ag_ajouter_admin() { FILE *f; char nom[50], prenom[50], username[50], matricule[8];
+
+f = fopen("admins.txt", "a");
+if (f == NULL) {
+    printf("\n[ERREUR] Impossible d'ouvrir le fichier 'admins.txt'.\n");
+    return;
+}
+
+srand(time(NULL));
+
+printf("\n=== AJOUT D'UN NOUVEL ADMINISTRATEUR ===\n");
+printf("Nom : ");
+scanf("%s", nom);
+printf("Prénom : ");
+scanf("%s", prenom);
+printf("Nom d'utilisateur : ");
+scanf("%s", username);
+
+genererMatriculeAdmin(matricule);
+
+fprintf(f, "%s %s %s %s\n", nom, prenom, username, matricule);
+fclose(f);
+
+printf("\n[SUCCÈS] Administrateur ajouté avec succès !\n");
+printf("Matricule attribué : %s\n", matricule);
+
+}
+
+int main() { ag_ajouter_admin(); return 0; 
+}
+```
+
+💾 Exemple du fichier admins.txt après ajout :
+
+URBAIN URBAIN Urbain ADM3F6A
