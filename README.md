@@ -30,6 +30,7 @@ Si les deux informations correspondent, la connexion est validée et le menu de 
 
 💻 Code en C
 
+```
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -85,7 +86,9 @@ int main() {
 
     return 0;
 }
-
+```
 🗂️ Exemple de contenu du fichier super_admin.txt
 
 admin_general ADM0002
+
+#### b. AJOUTER UN ADMIN 
