@@ -553,4 +553,147 @@ if (!trouve)
 *************************************
 #### e. 🗑️ Supprimer un utilisateur
 
+Cette fonctionnalité permet à un administrateur simple de supprimer définitivement un utilisateur enregistré dans le fichier utilisateurs.txt.
+L’administrateur saisit le matricule de l’utilisateur à supprimer.
+Le programme lit tous les enregistrements et recopie dans un fichier temporaire uniquement ceux dont le matricule est différent, avant de remplacer le fichier original.
+Cela permet de gérer la suppression sans perte accidentelle de données.
+
+💻 Code complet
+
+```
+#include <stdio.h> #include <stdlib.h> #include <string.h>
+
+struct Utilisateur { char nom[50]; char prenom[50]; char matricule[8]; char statut[15]; };
+
+void supprimer_utilisateur() { FILE *f, *temp; struct Utilisateur u; char matricule[8]; int trouve = 0;
+
+f = fopen("utilisateurs.txt", "r");
+temp = fopen("temp.txt", "w");
+
+if (f == NULL || temp == NULL) {
+    printf("\n[ERREUR] Impossible d'ouvrir les fichiers.\n");
+    return;
+}
+
+printf("\n=== SUPPRESSION D'UN UTILISATEUR ===\n");
+printf("Entrez le matricule de l'utilisateur à supprimer : ");
+scanf("%s", matricule);
+
+while (fscanf(f, "%s %s %s %s", u.nom, u.prenom, u.matricule, u.statut) != EOF) {
+    if (strcmp(u.matricule, matricule) == 0) {
+        trouve = 1;
+        printf("\nUtilisateur trouvé et supprimé : %s %s (%s)\n", u.nom, u.prenom, u.matricule);
+    } else {
+        fprintf(temp, "%s %s %s %s\n", u.nom, u.prenom, u.matricule, u.statut);
+    }
+}
+
+fclose(f);
+fclose(temp);
+
+remove("utilisateurs.txt");
+rename("temp.txt", "utilisateurs.txt");
+
+if (!trouve)
+    printf("\n[AUCUN RÉSULTAT] Aucun utilisateur trouvé avec ce matricule.\n");
+else
+    printf("\n[SUCCÈS] L'utilisateur a été supprimé avec succès.\n");
+
+}
+```
+*************************************
+#### f. 📜 Afficher tout les utilisateurs
+
+Cette fonctionnalité permet à un administrateur simple d’afficher la liste complète des utilisateurs enregistrés dans le fichier utilisateurs.txt.
+Elle est utile pour visualiser rapidement tous les membres du club, leurs matricules ainsi que leurs statuts de cotisation.
+Le programme lit ligne par ligne le fichier et affiche chaque utilisateur sous forme de tableau lisible.
+
+💻 Code complet
+
+```
+#include <stdio.h> #include <stdlib.h>
+
+struct Utilisateur { char nom[50]; char prenom[50]; char matricule[8]; char statut[15]; };
+
+void afficher_tous_utilisateurs() { FILE *f; struct Utilisateur u; int compteur = 0;
+
+f = fopen("utilisateurs.txt", "r");
+if (f == NULL) {
+    printf("\n[ERREUR] Impossible d'ouvrir le fichier 'utilisateurs.txt'.\n");
+    return;
+}
+
+printf("\n=========== LISTE DES UTILISATEURS ===========\n");
+printf("%-15s %-15s %-10s %-15s\n", "Nom", "Prénom", "Matricule", "Statut");
+printf("------------------------------------------------------------\n");
+
+while (fscanf(f, "%s %s %s %s", u.nom, u.prenom, u.matricule, u.statut) != EOF) {
+    printf("%-15s %-15s %-10s %-15s\n", u.nom, u.prenom, u.matricule, u.statut);
+    compteur++;
+}
+
+fclose(f);
+
+if (compteur == 0)
+    printf("\n[AUCUN UTILISATEUR] Aucun utilisateur enregistré.\n");
+else
+    printf("\n[INFO] %d utilisateur(s) affiché(s).\n", compteur);
+
+}
+```
+*************************************
+#### g. 🍳 Rechercher un utilisateur 
+
+🧩 6️⃣ Fonctionnalité : Rechercher un utilisateur par son matricule
+
+📋 Description
+
+Cette fonctionnalité permet à un administrateur simple de retrouver rapidement un utilisateur en entrant son matricule.
+Le programme parcourt le fichier utilisateurs.txt, compare chaque matricule et affiche les informations de l’utilisateur correspondant si trouvé.
+C’est une fonction essentielle pour accéder directement à la fiche d’un membre du club sans parcourir toute la liste.
+
+
+---
+
+💻 Code complet
+
+```
+#include <stdio.h> #include <stdlib.h> #include <string.h>
+
+struct Utilisateur { char nom[50]; char prenom[50]; char matricule[8]; char statut[15]; };
+
+void rechercher_utilisateur_par_matricule() { FILE *f; struct Utilisateur u; char matricule[8]; int trouve = 0;
+
+f = fopen("utilisateurs.txt", "r");
+if (f == NULL) {
+    printf("\n[ERREUR] Impossible d'ouvrir le fichier 'utilisateurs.txt'.\n");
+    return;
+}
+
+printf("\n=== RECHERCHE D'UN UTILISATEUR PAR MATRICULE ===\n");
+printf("Entrez le matricule : ");
+scanf("%s", matricule);
+
+while (fscanf(f, "%s %s %s %s", u.nom, u.prenom, u.matricule, u.statut) != EOF) {
+    if (strcmp(u.matricule, matricule) == 0) {
+        printf("\n[UTILISATEUR TROUVÉ]\n");
+        printf("Nom : %s\n", u.nom);
+        printf("Prénom : %s\n", u.prenom);
+        printf("Matricule : %s\n", u.matricule);
+        printf("Statut de cotisation : %s\n", u.statut);
+        trouve = 1;
+        break;
+    }
+}
+
+fclose(f);
+
+if (!trouve)
+    printf("\n[AUCUN RÉSULTAT] Aucun utilisateur trouvé avec ce matricule.\n");
+
+}
+```
+*************************************
+#### h.📜 
+
 
