@@ -339,14 +339,76 @@ Nom           : Nana
 Prénom        : Elise
 Nom d'utilisateur : enana
 Matricule     : ADMZ7KQ
--------------------------------
 
 Administrateur 2
 Nom           : Tchoumba
 Prénom        : Paul
 Nom d'utilisateur : tchoumba
-Matricule     : ADM3F6A
----------------------------------
+Matricule     : ADM3F6AQ
 *************************************
-#### e. 
+#### e. 🍳 Rechercher un admin
+
+Cette fonctionnalité permet de rechercher un administrateur spécifique dans la base de données (admins.txt) en saisissant son matricule.
+Le programme parcourt le fichier ligne par ligne, compare le matricule saisi à ceux enregistrés et, en cas de correspondance, affiche les informations complètes de l’administrateur trouvé.
+Si aucun administrateur ne correspond, un message indique que le matricule est introuvable.
+
+Cette recherche est utile pour identifier rapidement un administrateur sans devoir afficher toute la liste.
+
+💻 Code complet
+
+```
+#include <stdio.h> #include <stdlib.h> #include <string.h>
+
+void ag_rechercher_admin_par_matricule() { FILE *f; char nom[50], prenom[50], username[50], matricule[8]; char recherche[8]; int trouve = 0;
+
+f = fopen("admins.txt", "r");
+if (f == NULL) {
+    printf("\n[ERREUR] Impossible d'ouvrir le fichier 'admins.txt'.\n");
+    return;
+}
+
+printf("\n=== RECHERCHE D'UN ADMINISTRATEUR PAR MATRICULE ===\n");
+printf("Entrez le matricule à rechercher : ");
+scanf("%s", recherche);
+
+while (fscanf(f, "%s %s %s %s", nom, prenom, username, matricule) != EOF) {
+    if (strcmp(matricule, recherche) == 0) {
+        trouve = 1;
+        printf("\nAdministrateur trouvé !\n");
+        printf("Nom           : %s\n", nom);
+        printf("Prénom        : %s\n", prenom);
+        printf("Nom d'utilisateur : %s\n", username);
+        printf("Matricule     : %s\n", matricule);
+        break;
+    }
+}
+
+if (!trouve) {
+    printf("\n[AUCUN] Aucun administrateur trouvé avec le matricule '%s'.\n", recherche);
+}
+
+fclose(f);
+
+}
+
+int main() { ag_rechercher_admin_par_matricule(); return 0; 
+}
+```
+
+🧩 Exemple d’exécution
+
+=== RECHERCHE D'UN ADMINISTRATEUR PAR MATRICULE ===
+Entrez le matricule à rechercher : ADM3F6A
+
+Administrateur trouvé !
+Nom           : Tchoumba
+Prénom        : Paul
+Nom d'utilisateur : tchoumba
+Matricule     : ADM3F6A
+
+ou, si aucun résultat :
+
+[AUCUN] Aucun administrateur trouvé avec le matricule 'ADM9K4X'.
+
+#### 4. ADMINISTRATEUR SIMPLE 
 
