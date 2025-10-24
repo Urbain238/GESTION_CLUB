@@ -32,37 +32,60 @@ Si les deux informations correspondent, la connexion est validée et le menu de 
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
-// Fonction d’authentification de l’administrateur général
 int ag_connexion() {
     char username[50], matricule[10];
     char file_username[50], file_matricule[10];
-    FILE *f = fopen("super_admin.txt", "r");
+    FILE *f;
 
+    // Ouverture du fichier contenant les informations du super admin
+    f = fopen("super_admin.txt", "r");
     if (f == NULL) {
-        printf("\n[ERREUR] Fichier super_admin.txt introuvable.\n");
+        printf("\n[ERREUR] Le fichier 'super_admin.txt' est introuvable.\n");
+        printf("Veuillez d'abord initialiser le super administrateur.\n");
         return 0;
     }
 
-    printf("\n=== CONNEXION ADMINISTRATEUR GENERAL ===\n");
+    printf("\n============================\n");
+    printf("   CONNEXION ADMIN GÉNÉRAL  \n");
+    printf("============================\n");
+
     printf("Nom d'utilisateur : ");
     scanf("%s", username);
     printf("Matricule : ");
     scanf("%s", matricule);
 
-    // Lecture du fichier et comparaison
+    // Lecture ligne par ligne du fichier pour vérifier les identifiants
+    int trouve = 0;
     while (fscanf(f, "%s %s", file_username, file_matricule) != EOF) {
         if (strcmp(username, file_username) == 0 && strcmp(matricule, file_matricule) == 0) {
-            fclose(f);
-            printf("\n[SUCCÈS] Connexion réussie !\n");
-            return 1; // Connexion réussie
+            trouve = 1;
+            break;
         }
     }
-
     fclose(f);
-    printf("\n[ÉCHEC] Nom d'utilisateur ou matricule incorrect.\n");
-    return 0; // Connexion échouée
+
+    if (trouve) {
+        printf("\n[SUCCÈS] Connexion réussie ! Bienvenue %s.\n", username);
+        return 1;
+    } else {
+        printf("\n[ÉCHEC] Nom d'utilisateur ou matricule incorrect.\n");
+        return 0;
+    }
 }
+
+int main() {
+    // Exemple de test
+    if (ag_connexion()) {
+        printf("\nAccès au menu de l'administrateur général...\n");
+    } else {
+        printf("\nFin du programme.\n");
+    }
+
+    return 0;
+}
+
 🗂️ Exemple de contenu du fichier super_admin.txt
 
 admin_general ADM0002
