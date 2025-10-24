@@ -1,1 +1,2 @@
-***************************************## PROJET PERSONNEL DE GESTION D'UN CLUB EN C
+***************************************
+## PROJET PERSONNEL DE GESTION D'UN CLUB EN C
