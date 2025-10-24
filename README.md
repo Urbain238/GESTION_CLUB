@@ -279,6 +279,74 @@ Tchoumba Paul tchoumba ADM3F6A
 
 Nana Elise enana ADMZ7KQ
 *************************************
-#### d. 
+#### d. 📋 Affichage de tous les administrateurs
 
+Cette fonctionnalité permet à l’administrateur général d’afficher la liste complète de tous les administrateurs enregistrés dans le fichier admins.txt.
+Chaque ligne du fichier contient les informations d’un administrateur, à savoir son nom, prénom, nom d’utilisateur et matricule.
+Le programme parcourt le fichier et affiche le contenu de manière lisible à l’écran.
+Si aucun administrateur n’est enregistré, un message d’avertissement s’affiche.
+
+Cette fonctionnalité permet donc à l’administrateur général d’avoir une vue d’ensemble sur la structure administrative du club.
+
+💻 Code complet de la fonctionnalité
+
+```
+#include <stdio.h> #include <stdlib.h>
+
+void ag_afficher_tous_admins() { FILE *f; char nom[50], prenom[50], username[50], matricule[8]; int compteur = 0;
+
+f = fopen("admins.txt", "r");
+if (f == NULL) {
+    printf("\n[ERREUR] Impossible d'ouvrir le fichier 'admins.txt'.\n");
+    return;
+}
+
+printf("\n=== LISTE DE TOUS LES ADMINISTRATEURS ===\n");
+
+while (fscanf(f, "%s %s %s %s", nom, prenom, username, matricule) != EOF) {
+    compteur++;
+    printf("\nAdministrateur %d\n", compteur);
+    printf("Nom           : %s\n", nom);
+    printf("Prénom        : %s\n", prenom);
+    printf("Nom d'utilisateur : %s\n", username);
+    printf("Matricule     : %s\n", matricule);
+    printf("-------------------------------");
+}
+
+if (compteur == 0) {
+    printf("\n[AUCUN] Aucun administrateur enregistré pour le moment.\n");
+}
+
+fclose(f);
+
+}
+
+int main() { ag_afficher_tous_admins(); return 0; }
+```
+
+💾 Exemple du fichier admins.txt
+
+Nana Elise enana ADMZ7KQ
+Tchoumba Paul tchoumba ADM3F6A
+Moukoko Henri hmouk ADM8R2T
+
+🖥️ Affichage à l’écran
+
+=== LISTE DE TOUS LES ADMINISTRATEURS ===
+
+Administrateur 1
+Nom           : Nana
+Prénom        : Elise
+Nom d'utilisateur : enana
+Matricule     : ADMZ7KQ
+-------------------------------
+
+Administrateur 2
+Nom           : Tchoumba
+Prénom        : Paul
+Nom d'utilisateur : tchoumba
+Matricule     : ADM3F6A
+---------------------------------
+*************************************
+#### e. 
 
