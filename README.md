@@ -14,6 +14,7 @@ Toutes les informations sont enregistrées dans des fichiers texte afin d’assu
 #### 1. ADMINISTRATEUR GÉNÉRAL
 L'administrateur général dans cette application est celui qui a le plus de pouvoir il aura les droit suivant 
 
+*************************************
 #### a. 🔐 Authentification de l’administrateur général
 
 Cette fonctionnalité permet à l’administrateur général d’accéder à son espace sécurisé dans le logiciel.
@@ -91,6 +92,7 @@ int main() {
 
 admin_general ADM0002
 
+*************************************
 #### b. 👤 Ajout d’un administrateur
 
 Cette fonctionnalité permet à l’administrateur général d’ajouter un nouvel administrateur dans le système.
@@ -143,3 +145,77 @@ int main() { ag_ajouter_admin(); return 0;
 💾 Exemple du fichier admins.txt après ajout :
 
 URBAIN URBAIN Urbain ADM3F6A
+*************************************
+#### b. 🛠️ Modification d’un administrateur
+
+Cette fonctionnalité permet à l’administrateur général de modifier les informations d’un administrateur existant.
+La recherche se fait à partir du matricule de l’administrateur, qui est unique.
+Une fois trouvé, le programme permet de mettre à jour son nom, prénom et nom d’utilisateur.
+Les modifications sont ensuite enregistrées dans le fichier admins.txt, garantissant ainsi la mise à jour des données sans perte.
+
+Le système parcourt tout le fichier, recopie les administrateurs dans un fichier temporaire, met à jour celui correspondant au matricule saisi, puis remplace l’ancien fichier par le nouveau.
+
+💻 Code complet de la fonctionnalité
+
+```
+#include <stdio.h> #include <string.h> #include <stdlib.h>
+
+void ag_modifier_admin() { FILE *f, *temp; char nom[50], prenom[50], username[50], matricule[8]; char nom_f[50], prenom_f[50], username_f[50], matricule_f[8]; int trouve = 0;
+
+f = fopen("admins.txt", "r");
+temp = fopen("temp.txt", "w");
+
+if (f == NULL || temp == NULL) {
+    printf("\n[ERREUR] Impossible d'ouvrir le fichier.\n");
+    return;
+}
+
+printf("\n=== MODIFICATION D'UN ADMINISTRATEUR ===\n");
+printf("Entrez le matricule de l'administrateur à modifier : ");
+scanf("%s", matricule);
+
+while (fscanf(f, "%s %s %s %s", nom_f, prenom_f, username_f, matricule_f) != EOF) {
+    if (strcmp(matricule, matricule_f) == 0) {
+        trouve = 1;
+        printf("\nAdministrateur trouvé !\n");
+        printf("Nouveau nom : ");
+        scanf("%s", nom);
+        printf("Nouveau prénom : ");
+        scanf("%s", prenom);
+        printf("Nouveau nom d'utilisateur : ");
+        scanf("%s", username);
+        fprintf(temp, "%s %s %s %s\n", nom, prenom, username, matricule_f);
+        printf("\n[SUCCÈS] Les informations ont été mises à jour.\n");
+    } else {
+        fprintf(temp, "%s %s %s %s\n", nom_f, prenom_f, username_f, matricule_f);
+    }
+}
+
+fclose(f);
+fclose(temp);
+
+if (!trouve) {
+    printf("\n[AUCUN] Aucun administrateur trouvé avec ce matricule.\n");
+    remove("temp.txt");
+} else {
+    remove("admins.txt");
+    rename("temp.txt", "admins.txt");
+}
+
+}
+
+int main() { ag_modifier_admin(); return 0; 
+}
+```
+
+💾 Avant modification (admins.txt)
+
+Nana Elise enana ADMZ7KQ
+
+💾 Après modification
+
+Nana Elise nana ADMZ7KQ
+
+*************************************
+#### c. 
+
