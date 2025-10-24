@@ -1,4 +1,5 @@
-Aff***************************************
+*************************************
+
 ## PROJET PERSONNEL DE GESTION D'UN CLUB EN C
 **************************************
 ### 🧩 DESCRIPTION DU PROJET 
@@ -744,5 +745,149 @@ if (!trouve)
 Ce dernier possede les droits les plus restreint de l'application
 *************************************
 #### a. 🍳 Consulter son statut de cotisation
+
+Cette fonctionnalité permet à un utilisateur (membre du club) de consulter son statut de cotisation.
+Il entre simplement son matricule, et le programme recherche dans le fichier utilisateurs.txt pour afficher ses informations, notamment son montant, le type de cotisation et son statut actuel.
+Cela permet à chaque membre de suivre sa participation financière sans passer par un administrateur.
+
+💻 Code complet
+
+```
+#include <stdio.h> #include <stdlib.h> #include <string.h>
+
+struct Utilisateur { char nom[50]; char prenom[50]; char matricule[8]; char username[50]; float montant; char type_cotisation[30]; char statut[15]; };
+
+void consulter_statut_utilisateur() { FILE *f; struct Utilisateur u; char matricule[8]; int trouve = 0;
+
+f = fopen("utilisateurs.txt", "r");
+if (f == NULL) {
+    printf("\n[ERREUR] Impossible d'ouvrir le fichier 'utilisateurs.txt'.\n");
+    return;
+}
+
+printf("\n=== CONSULTATION DU STATUT DE COTISATION ===\n");
+printf("Entrez votre matricule : ");
+scanf("%s", matricule);
+
+while (fscanf(f, "%s %s %s %s %f %s %s",
+              u.nom, u.prenom, u.matricule, u.username,
+              &u.montant, u.type_cotisation, u.statut) != EOF) {
+    if (strcmp(u.matricule, matricule) == 0) {
+        printf("\n=== VOS INFORMATIONS ===\n");
+        printf("Nom : %s\n", u.nom);
+        printf("Prénom : %s\n", u.prenom);
+        printf("Matricule : %s\n", u.matricule);
+        printf("Montant cotisé : %.2f\n", u.montant);
+        printf("Type de cotisation : %s\n", u.type_cotisation);
+        printf("Statut : %s\n", u.statut);
+        trouve = 1;
+        break;
+    }
+}
+
+fclose(f);
+
+if (!trouve)
+    printf("\n[AUCUN RÉSULTAT] Aucun utilisateur trouvé avec ce matricule.\n");
+
+}
+```
+*************************************
+#### b. 💰 Ajouter un montant de cotisation
+
+Cette fonctionnalité permet à un utilisateur d’ajouter un montant de cotisation à son compte.
+En entrant son matricule, il peut verser un nouveau montant qui sera ajouté à son total existant.
+Le statut de cotisation est ensuite mis à jour automatiquement :
+
+“entière” si le montant atteint ou dépasse un seuil (par exemple 10 000 FCFA),
+
+“partielle” si un versement a été effectué mais reste inférieur au seuil,
+
+“aucune” si aucun montant n’a encore été versé.
+
+
+Cette fonction aide à suivre les contributions des membres en temps réel.
+
+💻 Code complet
+
+```
+#include <stdio.h> #include <stdlib.h> #include <string.h>
+
+struct Utilisateur { char nom[50]; char prenom[50]; char matricule[8]; char username[50]; float montant; char type_cotisation[30]; char statut[15]; };
+
+void ajouter_cotisation_utilisateur() { FILE *f, *temp; struct Utilisateur u; char matricule[8]; float ajout; int trouve = 0;
+
+f = fopen("utilisateurs.txt", "r");
+temp = fopen("temp.txt", "w");
+
+if (f == NULL || temp == NULL) {
+    printf("\n[ERREUR] Impossible d'ouvrir les fichiers.\n");
+    return;
+}
+
+printf("\n=== AJOUT D'UNE COTISATION ===\n");
+printf("Entrez votre matricule : ");
+scanf("%s", matricule);
+
+while (fscanf(f, "%s %s %s %s %f %s %s",
+              u.nom, u.prenom, u.matricule, u.username,
+              &u.montant, u.type_cotisation, u.statut) != EOF) {
+
+    if (strcmp(u.matricule, matricule) == 0) {
+        trouve = 1;
+        printf("\nBonjour %s %s !\n", u.nom, u.prenom);
+        printf("Montant actuel : %.2f\n", u.montant);
+        printf("Entrez le montant à ajouter : ");
+        scanf("%f", &ajout);
+
+        u.montant += ajout;
+
+        if (u.montant >= 10000)
+            strcpy(u.statut, "entière");
+        else if (u.montant > 0)
+            strcpy(u.statut, "partielle");
+        else
+            strcpy(u.statut, "aucune");
+
+        printf("\n[SUCCÈS] Nouveau montant total : %.2f\n", u.montant);
+        printf("Statut mis à jour : %s\n", u.statut);
+    }
+
+    fprintf(temp, "%s %s %s %s %.2f %s %s\n",
+            u.nom, u.prenom, u.matricule, u.username,
+            u.montant, u.type_cotisation, u.statut);
+}
+
+fclose(f);
+fclose(temp);
+
+remove("utilisateurs.txt");
+rename("temp.txt", "utilisateurs.txt");
+
+if (!trouve)
+    printf("\n[AUCUN RÉSULTAT] Aucun utilisateur trouvé avec ce matricule.\n");
+
+}
+```
+*************************************
+### 🏁 CONCLUSION 
+
+Le projet GESTION_CLUB illustre la mise en œuvre d’un système complet de gestion d’un club à travers une application en C reposant sur la programmation modulaire et la manipulation de fichiers texte.
+L’application propose une structure hiérarchique bien définie, allant de l’administrateur général à l’utilisateur, en passant par les administrateurs simples, chacun disposant de rôles et d’autorisations spécifiques.
+
+Ce projet met en pratique plusieurs notions essentielles de la programmation en C telles que :
+
+la gestion de fichiers pour la persistance des données,
+
+la manipulation de structures,
+
+la modularité du code,
+
+et l’interaction utilisateur via une interface console intuitive.
+
+
+Il offre ainsi une vision concrète de la manière dont un logiciel de gestion peut être conçu à partir de zéro en langage C, tout en respectant la logique d’organisation, de sécurité et de maintenance des données.
+Ce projet constitue une excellente base pour de futures améliorations, comme l’ajout d’un système d’authentification renforcé, d’un menu interactif enrichi ou encore d’une interface graphique.
+
 
 
