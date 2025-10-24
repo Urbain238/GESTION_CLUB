@@ -410,5 +410,147 @@ ou, si aucun résultat :
 
 [AUCUN] Aucun administrateur trouvé avec le matricule 'ADM9K4X'.
 
+*************************************
 #### 4. ADMINISTRATEUR SIMPLE 
+Ce dernier dispose également des mêmes droits que l'administrateur général.
+#### b. 🍳 Consulter son matricule 
+
+Cette fonctionnalité permet à un administrateur simple connecté d’afficher son nom d’utilisateur et son matricule enregistrés dans le fichier admins.txt.
+Cela permet de rappeler son identité système sans modifier les données.
+
+💻 Code complet
+
+```
+#include <stdio.h> #include <stdlib.h> #include <string.h>
+
+void admin_consulter_matricule(char username_connecte[]) { FILE *f; char nom[50], prenom[50], username[50], matricule[8]; int trouve = 0;
+
+f = fopen("admins.txt", "r");
+if (f == NULL) {
+    printf("\n[ERREUR] Impossible d'ouvrir le fichier 'admins.txt'.\n");
+    return;
+}
+
+while (fscanf(f, "%s %s %s %s", nom, prenom, username, matricule) != EOF) {
+    if (strcmp(username_connecte, username) == 0) {
+        printf("\n=== INFORMATIONS ADMINISTRATEUR ===\n");
+        printf("Nom d'utilisateur : %s\n", username);
+        printf("Matricule         : %s\n", matricule);
+        trouve = 1;
+        break;
+    }
+}
+
+if (!trouve)
+    printf("\n[AUCUNE DONNÉE] Administrateur non trouvé.\n");
+
+fclose(f);
+
+}
+```
+*************************************
+#### a. 👥 Ajouter un utilisateur 
+
+Cette fonctionnalité permet à un administrateur simple d’enregistrer un nouvel utilisateur du club dans le fichier utilisateurs.txt.
+Chaque utilisateur possède un nom, un prénom, un matricule unique (généré automatiquement) et un statut de cotisation (entière, partielle ou aucune).
+Elle permet ainsi d’assurer la traçabilité des membres du club et de suivre leurs cotisations.
+
+💻 Code complet
+
+```
+#include <stdio.h> #include <stdlib.h> #include <string.h> #include <time.h>
+
+struct Utilisateur { char nom[50]; char prenom[50]; char matricule[8]; char statut[15]; };
+
+void generer_matricule_utilisateur(char matricule[]) { srand(time(NULL)); sprintf(matricule, "U%04d", rand() % 10000); }
+
+void ajouter_utilisateur() { FILE *f; struct Utilisateur u; char choix;
+
+f = fopen("utilisateurs.txt", "a");
+if (f == NULL) {
+    printf("\n[ERREUR] Impossible d'ouvrir le fichier 'utilisateurs.txt'.\n");
+    return;
+}
+
+do {
+    printf("\n=== AJOUT D'UN NOUVEL UTILISATEUR ===\n");
+    printf("Nom : ");
+    scanf("%s", u.nom);
+    printf("Prénom : ");
+    scanf("%s", u.prenom);
+
+    generer_matricule_utilisateur(u.matricule);
+
+    printf("Statut de cotisation (entière/partielle/aucune) : ");
+    scanf("%s", u.statut);
+
+    fprintf(f, "%s %s %s %s\n", u.nom, u.prenom, u.matricule, u.statut);
+    printf("\n[SUCCÈS] Utilisateur ajouté avec matricule : %s\n", u.matricule);
+
+    printf("\nVoulez-vous ajouter un autre utilisateur ? (o/n) : ");
+    scanf(" %c", &choix);
+
+} while (choix == 'o' || choix == 'O');
+
+fclose(f);
+
+}
+```
+*************************************
+#### c. 🛠️ Modifier un utilisateur 
+
+Cette fonctionnalité permet à un administrateur simple de mettre à jour les informations d’un utilisateur déjà enregistré dans le fichier utilisateurs.txt.
+L’administrateur peut rechercher l’utilisateur grâce à son matricule puis modifier son nom, prénom ou statut de cotisation.
+C’est une fonction essentielle pour corriger ou actualiser les données des membres du club.
+
+💻 Code complet
+
+```
+#include <stdio.h> #include <stdlib.h> #include <string.h>
+
+struct Utilisateur { char nom[50]; char prenom[50]; char matricule[8]; char statut[15]; };
+
+void modifier_utilisateur() { FILE *f, *temp; struct Utilisateur u; char matricule[8]; int trouve = 0;
+
+f = fopen("utilisateurs.txt", "r");
+temp = fopen("temp.txt", "w");
+
+if (f == NULL || temp == NULL) {
+    printf("\n[ERREUR] Impossible d'ouvrir les fichiers.\n");
+    return;
+}
+
+printf("\n=== MODIFICATION D'UN UTILISATEUR ===\n");
+printf("Entrez le matricule de l'utilisateur à modifier : ");
+scanf("%s", matricule);
+
+while (fscanf(f, "%s %s %s %s", u.nom, u.prenom, u.matricule, u.statut) != EOF) {
+    if (strcmp(u.matricule, matricule) == 0) {
+        trouve = 1;
+        printf("\nUtilisateur trouvé : %s %s (%s)\n", u.nom, u.prenom, u.matricule);
+        printf("Nouveau nom : ");
+        scanf("%s", u.nom);
+        printf("Nouveau prénom : ");
+        scanf("%s", u.prenom);
+        printf("Nouveau statut de cotisation (entière/partielle/aucune) : ");
+        scanf("%s", u.statut);
+        printf("\n[SUCCÈS] Informations mises à jour.\n");
+    }
+    fprintf(temp, "%s %s %s %s\n", u.nom, u.prenom, u.matricule, u.statut);
+}
+
+fclose(f);
+fclose(temp);
+
+remove("utilisateurs.txt");
+rename("temp.txt", "utilisateurs.txt");
+
+if (!trouve)
+    printf("\n[AUCUN RÉSULTAT] Aucun utilisateur trouvé avec ce matricule.\n");
+
+}
+```
+*************************************
+#### e. 🗑️ Supprimer un utilisateur
+
 
