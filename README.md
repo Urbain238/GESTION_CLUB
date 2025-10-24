@@ -217,5 +217,68 @@ Nana Elise enana ADMZ7KQ
 Nana Elise nana ADMZ7KQ
 
 *************************************
-#### c. 
+#### c. 🗑️ Suppression d’un administrateur
+
+Cette fonctionnalité permet à l’administrateur général de supprimer un administrateur existant du système à l’aide de son matricule.
+Le programme recherche dans le fichier admins.txt l’administrateur correspondant au matricule saisi, puis réécrit toutes les autres lignes dans un fichier temporaire.
+Une fois la suppression confirmée, le fichier temporaire remplace l’ancien fichier, garantissant ainsi une mise à jour sûre et propre des données.
+
+Cette méthode évite la perte accidentelle d’autres enregistrements et maintient la cohérence du fichier.
+
+💻 Code complet de la fonctionnalité
+
+```
+#include <stdio.h> #include <string.h> #include <stdlib.h>
+
+void ag_supprimer_admin() { FILE *f, *temp; char nom[50], prenom[50], username[50], matricule[8]; char nom_f[50], prenom_f[50], username_f[50], matricule_f[8]; int trouve = 0;
+
+f = fopen("admins.txt", "r");
+temp = fopen("temp.txt", "w");
+
+if (f == NULL || temp == NULL) {
+    printf("\n[ERREUR] Impossible d'ouvrir le fichier.\n");
+    return;
+}
+
+printf("\n=== SUPPRESSION D'UN ADMINISTRATEUR ===\n");
+printf("Entrez le matricule de l'administrateur à supprimer : ");
+scanf("%s", matricule);
+
+while (fscanf(f, "%s %s %s %s", nom_f, prenom_f, username_f, matricule_f) != EOF) {
+    if (strcmp(matricule, matricule_f) == 0) {
+        trouve = 1;
+        printf("\n[INFO] Administrateur trouvé et supprimé avec succès.\n");
+        continue; // on saute l’écriture de cet admin
+    }
+    fprintf(temp, "%s %s %s %s\n", nom_f, prenom_f, username_f, matricule_f);
+}
+
+fclose(f);
+fclose(temp);
+
+if (!trouve) {
+    printf("\n[AUCUN] Aucun administrateur trouvé avec ce matricule.\n");
+    remove("temp.txt");
+} else {
+    remove("admins.txt");
+    rename("temp.txt", "admins.txt");
+}
+
+}
+
+int main() { ag_supprimer_admin(); return 0; 
+}
+```
+
+💾 Exemple avant suppression (admins.txt)
+
+Nana Elise enana ADMZ7KQ
+Tchoumba Paul tchoumba ADM3F6A
+
+💾 Exemple après suppression
+
+Nana Elise enana ADMZ7KQ
+*************************************
+#### d. 
+
 
