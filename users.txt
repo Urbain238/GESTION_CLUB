@@ -1,0 +1,4 @@
+USE9999|PAUL|PAUL|user|20000|non
+USE1004|URBBBAIN|PAUL|user2|0.00|Aucun|Non
+USE5643|ATANGANA|Franck|franck2|200000.00|Annuelle|Entièrement
+USE9715|MANGA|Pierre|pierre|2000000.00|Anuelle|Entièrement
